@@ -10,10 +10,10 @@
 int main()
 {
     FILE *origin_file=0, *output_file=0;
-    unsigned long int file_length;
+    unsigned long int file_length=0;
     char c, to_store_value;
     char line_string[LINE_MAX_CHARACTERS+1];
-
+    char *buffer;
 
 
     origin_file = fopen(INPUT_FILE_NAME,"r");   //Open file to read and write
@@ -21,27 +21,49 @@ int main()
 
     if (origin_file)
     {
-        //printf("Origin address: %x\n", &origin_file);
-        //printf("Origin content: %x\n", origin_file);
+        printf("Origin address: %x\n", &origin_file);
+        printf("Origin content: %x\n", origin_file);
 
         ///////////////////
-        fseek(origin_file, 0, 2);
-        file_length = ftell(origin_file);
-        fseek(origin_file, -file_length, 1);     //Returns pointer to original value.
-        printf("\nFile length: %d   pos:%d\n", file_length, ftell(origin_file));
+        fseek(origin_file, 0, 2);                   //Get cursor to the end of the file
+        file_length = ftell(origin_file);           //Cursor position.
+        fseek(origin_file, -file_length, 1);        //Return cursor to original value.
+
+        buffer = malloc((sizeof(char) * file_length)+1);    //Allocates RAM to store into array.
         ////////////////////////
 
+        printf("Origin content: %x\n", origin_file);
+        printf("File length: %d\n", file_length);
 
-        while ((c = getc(origin_file)) != EOF)       //Iterate the whole file.
-        {
-            to_store_value = c;
-            printf("%c(%d) ",to_store_value,ftell(origin_file));
-            if(c >= '0' && c <= '9')
-                to_store_value = '*';
-
-
-            fputc(to_store_value,output_file);
+        unsigned long int i=0;
+        while((c = fgetc(origin_file)) != EOF ){
+            buffer[i] = c; //Copies char value to buffer
+            printf("%d",i);
+            i++;
         }
+        //buffer[i] = c;
+        printf("%d", i);
+        printf("\n buffer: %s \n",buffer);
+
+        for(i=0; i < file_length ; i++){    //Iterate buffer
+            to_store_value = buffer[i];
+            printf("%c(%d) ",to_store_value, i);
+        }
+
+//        while ((c = getc(origin_file)) != EOF)       //Iterate the whole file.
+//        {
+//            to_store_value = c;
+//            printf("%c(%d) ",to_store_value,ftell(origin_file));
+//
+//            if(c >= '0' && c <= '9')    //Filters, conditions, etc.
+//                to_store_value = '*';
+//            else if(c == '.' && 1)
+//            {
+//
+//            }
+//
+//            fputc(to_store_value,output_file);      //Write character.
+//        }
 
 
 
@@ -55,6 +77,7 @@ int main()
 
     fclose(origin_file);
     fclose(output_file);
+    free(buffer);
     return 0;
 }
 
