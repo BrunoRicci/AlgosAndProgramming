@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1617819983 source:c:\users\bruno - pc\repos_git\algoritmi_e_programmazione\exercises\lab 3\lab_3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
