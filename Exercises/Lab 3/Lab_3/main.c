@@ -49,10 +49,33 @@ int main()
                 //printf("\nnumber\n");
                 strcat(line_string, "*");
             }
-            else if((buffer[i] == '.' || buffer[i] == ',' || buffer[i] == ';' || buffer[i] == ':' || buffer[i] == '!' || buffer[i] == '?') && (buffer[i+1] != ' ' || buffer[i+1] != '\n') )
+//            else if((buffer[i] == '.' || buffer[i] == ',' || buffer[i] == ';' || buffer[i] == ':' || buffer[i] == '!' || buffer[i] == '?') && (buffer[i+1] != ' ' || buffer[i+1] != '\n') )
+//            {
+//                //printf("\ndot\n");
+//                char x[2]={0,0};
+//                x[0]=(char)buffer[i];
+//                strcat(line_string, x);
+//                strcat(line_string, " ");
+//            }
+            //
+            else if(buffer[i] == '.' || buffer[i] == ',' || buffer[i] == ';' || buffer[i] == ':' || buffer[i] == '!' || buffer[i] == '?')
             {
-                //printf("\ndot\n");
-                strcat(line_string, ". ");
+                if(buffer[i] == '.' || buffer[i] == '!' || buffer[i] == '?')   //Add uppercase
+                {
+                   if(buffer[i+2] >= 'a' && buffer[i+2] <= 'z' )
+                      buffer[i+2]-=20;    //Convert to uppercase
+
+                }
+
+                char x[2]={0,0};
+                x[0]=(char)buffer[i];
+                strcat(line_string, x); //Add character
+
+                if(buffer[i+1] != ' ' || buffer[i+1] != '\n')
+                {
+                    strcat(line_string, " ");
+                }
+
             }
             else{
                 //printf("\ncharacter\n");
@@ -63,11 +86,20 @@ int main()
 
             if(character_counter >= LINE_MAX_CHARACTERS || buffer[i] == '\n' )
             {
+                printf("\n###\n");
                 char x[3]={0,0,0};
-                //Add character count
-                line_string[character_counter]=' '; //Replace for SPACE symbol
+                itoa(character_counter, x , 10);  //Save amount of characters into X array
+
+                if(line_string[character_counter] == '\n')
+                    line_string[character_counter]='\0'; //Replace '\n' for SPACE symbol
+
+                while(character_counter < LINE_MAX_CHARACTERS)
+                {
+                    strcat(line_string, " ");
+                    character_counter++;
+                }
+
                 strcat(line_string, "| c:");
-                itoa(character_counter, x , 10);  //Convert number to array
                 strcat(line_string, x);
                 strcat(line_string, "\n");
 
@@ -84,18 +116,11 @@ int main()
         }
 
         printf("\n\nline_string: %s", line_string);
-
-
-
-
-
-        //" | c:%d \n"
-
     }
     else
         printf("Could not open the file.");
 
-    showOutputFile(output_file);
+    //showOutputFile(output_file);
 
     fclose(origin_file);
     fclose(output_file);
